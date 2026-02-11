@@ -1,9 +1,18 @@
 const express = require('express');
+const { config } = require('./configuration/config');
 
 const app = express();
 app.use(express.json());
 
-// Zona de rutas por definir.
+// Zona de rutas.
+const companiesRouter = require('./router/companiesRouter');
+const videogamesRouter = require('./router/videogamesRouter');
+const consolesRouter = require('./router/consolesRouter');
+
+// Asignamos las URLs base.
+app.use('/companies', companiesRouter);
+app.use('/videogames', videogamesRouter);
+app.use('/consoles', consolesRouter);
 
 // Ruta para manejar endpoints no encontrados.
 app.use((req, res) => {
@@ -24,7 +33,6 @@ app.use((err, req, res, next) => {
   });
 });
 
-const { config } = require('./configuration/config');
 const PORT = config.service.port || 8080;
 app.listen(PORT, () => {
     console.log(`Backend iniciado en el puerto: ${PORT}`);
