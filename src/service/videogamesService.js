@@ -59,7 +59,7 @@ const findVideogameById = async (id) => {
  * @returns {Promise<number>} Devuelve el ID del nuevo videojuego insertado.
  */
 const addVideogame = async (videogameData) => {
-  const { consoles, ...videogameInfo} = videogameData;
+  const { consoles, ...videogameInfo } = videogameData;
 
   const [newId] = await db('videogames').insert(videogameInfo);
 
@@ -74,8 +74,35 @@ const addVideogame = async (videogameData) => {
   return newId;
 }
 
+/**
+ * Actualiza la información de un videojuego existente.
+ * Actualiza los datos básicos y, si se proporciona una lista de consolas,
+ * reemplaza las relaciones existentes por las nuevas.
+ * @param {number} id - El ID del videojuego a actualizar.
+ * @param {Object} videogameData - Objeto con los datos a actualizar (puede incluir 'consoles').
+ * @returns {Promise<number>} Devuelve el ID del videojuego actualizado.
+ */
+const updateVideogame = async (id, videogameData) => {
+  const { consoles, ...videogameInfo } = videogameData;
+
+  await db('videogames').where({ id }).update(videogameInfo);
+
+  if (consoles !== undefined) {
+    await db('videogame_console').where({ videogame_id: id }).del();
+
+    if (consoles.length > 0) {
+      const relations = consoles.map(consoleId => ({
+        videogame_id: id,
+        console_id: consoleId
+      }));
+      await db('videogame_console').insert(relations);
+    }
+  }
+}
+
 module.exports = {
   findAllVideogames,
   findVideogameById,
-  addVideogame
+  addVideogame,
+  updateVideogame
 }
