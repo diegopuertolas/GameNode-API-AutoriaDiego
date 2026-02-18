@@ -3,12 +3,16 @@
 const express = require('express');
 const router = express.Router();
 
-const { getAllCompanies, getCompanyById } = require('../controller/companiesController');
-const { validateCompanyId } = require('../validators/companies');
+const { getAllCompanies, getCompanyById, postCompany, putCompany, deleteCompany } = require('../controller/companiesController');
+const { validateCompanyId, validateAddCompany, validateUpdateCompany } = require('../validators/companies');
 
 
 // Rutas
 router.get('/', getAllCompanies);
 router.get('/:id', validateCompanyId, getCompanyById);
+router.post('/', validateAddCompany, postCompany);
+router.put('/:id', validateUpdateCompany, putCompany);
+router.delete('/:id', validateCompanyId, deleteCompany);
+
 
 module.exports = router;
