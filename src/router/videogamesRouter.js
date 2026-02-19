@@ -1,4 +1,4 @@
-// Este archivo contiene la lista de todas las operaciones definidas en el /controller/videogamesController.js
+// Archivo que contiene la lista de todas las operaciones definidas en el /controller/videogamesController.js
 
 const express = require('express');
 const router = express.Router();
