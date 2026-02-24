@@ -6,7 +6,8 @@
     "start": "node src/app.js --config config.local.yaml",
     "dev": "nodemon -e js,yaml src/app.js -- --config config.local.yaml",
     "test:unit": "jest src/test/unit",
-    "test": "npm run test:unit"
+    "test": "npm run test:unit",
+    "lint": "eslint src/**/*.js"
   },
   "keywords": [],
   "author": "",
