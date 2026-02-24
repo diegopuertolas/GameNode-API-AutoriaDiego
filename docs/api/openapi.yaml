@@ -1,0 +1,597 @@
+openapi: 3.0.0
+info:
+  title: GameNode API
+  description: API REST para la gestión de videojuegos, consolas y empresas.
+  version: 1.0.0
+  contact:
+    name: Equipo GameNode
+    email: contacto@gamenode.local
+
+servers:
+  - url: http://localhost:8080
+    description: Servidor de Desarrollo Local
+
+tags:
+  - name: Companies
+    description: Operaciones de empresas (desarrolladoras y fabricantes)
+  - name: Consoles
+    description: Operaciones de hardware y plataformas de juego
+  - name: Videogames
+    description: Operaciones de software y juegos
+
+paths:
+  # ==========================================
+  # ENDPOINTS DE COMPANIES
+  # ==========================================
+  /companies:
+    get:
+      tags:
+        - Companies
+      summary: Obtener todas las empresas
+      description: Devuelve el listado completo de empresas registradas.
+      responses:
+        "200":
+          description: Lista de empresas recuperada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  title:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Empresas recuperadas correctamente
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Company"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      tags:
+        - Companies
+      summary: Crear una nueva empresa
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyInput"
+      responses:
+        "201":
+          description: Empresa creada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  title:
+                    type: string
+                    example: created
+                  message:
+                    type: string
+                    example: Empresa creada correctamente
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /companies/{id}:
+    get:
+      tags:
+        - Companies
+      summary: Obtener una empresa por ID
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: Empresa recuperada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  title:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Empresa recuperada correctamente
+                  data:
+                    $ref: "#/components/schemas/Company"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    put:
+      tags:
+        - Companies
+      summary: Actualizar una empresa
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CompanyInput"
+      responses:
+        "200":
+          description: Empresa actualizada con éxito
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    delete:
+      tags:
+        - Companies
+      summary: Eliminar una empresa
+      description: Elimina una empresa. ATENCIÓN por borrado en cascada también se eliminarán sus consolas y videojuegos.
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: Empresa eliminada con éxito
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  # ==========================================
+  # ENDPOINTS DE CONSOLES
+  # ==========================================
+  /consoles:
+    get:
+      tags:
+        - Consoles
+      summary: Obtener todas las consolas
+      responses:
+        "200":
+          description: Lista de consolas recuperada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  title:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Consolas recuperadas correctamente
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Console"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      tags:
+        - Consoles
+      summary: Crear una nueva consola
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConsoleInput"
+      responses:
+        "201":
+          description: Consola creada con éxito
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /consoles/{id}:
+    get:
+      tags:
+        - Consoles
+      summary: Obtener una consola por ID
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: Consola recuperada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  title:
+                    type: string
+                    example: success
+                  data:
+                    $ref: "#/components/schemas/Console"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    put:
+      tags:
+        - Consoles
+      summary: Actualizar una consola
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConsoleInput"
+      responses:
+        "200":
+          description: Consola actualizada con éxito
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    delete:
+      tags:
+        - Consoles
+      summary: Eliminar una consola
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: Consola eliminada con éxito
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+  # ==========================================
+  # 🎮 ENDPOINTS DE VIDEOGAMES
+  # ==========================================
+  /videogames:
+    get:
+      tags:
+        - Videogames
+      summary: Obtener todos los videojuegos
+      responses:
+        "200":
+          description: Lista recuperada con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  title:
+                    type: string
+                    example: success
+                  message:
+                    type: string
+                    example: Videojuegos recuperados correctamente
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Videogame"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+    post:
+      tags:
+        - Videogames
+      summary: Crear un nuevo videojuego
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VideogameInput"
+      responses:
+        "201":
+          description: Videojuego creado con éxito
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "500":
+          $ref: "#/components/responses/InternalError"
+
+  /videogames/{id}:
+    get:
+      tags:
+        - Videogames
+      summary: Obtener un videojuego por ID
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: Videojuego recuperado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  title:
+                    type: string
+                    example: success
+                  data:
+                    $ref: "#/components/schemas/Videogame"
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    put:
+      tags:
+        - Videogames
+      summary: Actualizar un videojuego
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VideogameInput"
+      responses:
+        "200":
+          description: Videojuego actualizado
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+    delete:
+      tags:
+        - Videogames
+      summary: Eliminar un videojuego
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+      responses:
+        "200":
+          description: Videojuego eliminado
+        "404":
+          $ref: "#/components/responses/NotFound"
+
+# ==========================================
+# COMPONENTES REUTILIZABLES
+# ==========================================
+components:
+  parameters:
+    PathId:
+      name: id
+      in: path
+      required: true
+      description: ID numérico del registro
+      schema:
+        type: integer
+        example: 1
+
+  schemas:
+    # --- MODELOS DE EMPRESAS ---
+    Company:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Nintendo"
+        description:
+          type: string
+          example: "Gigante japonés del entretenimiento familiar."
+        country:
+          type: string
+          example: "Japón"
+        year_founded:
+          type: integer
+          example: 1889
+        website:
+          type: string
+          example: "https://www.nintendo.com"
+        logo:
+          type: string
+          example: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Nintendo.svg/1920px-Nintendo.svg.png"
+
+    CompanyInput:
+      type: object
+      required: [name, description, country, year_founded, website, logo]
+      properties:
+        name:
+          type: string
+          example: "Sega"
+        description:
+          type: string
+          example: "Icono de los 90, ahora dedicado al software."
+        country:
+          type: string
+          example: "Japón"
+        year_founded:
+          type: integer
+          example: 1960
+        website:
+          type: string
+          example: "https://www.sega.com"
+        logo:
+          type: string
+          example: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Sega_logo.svg/1920px-Sega_logo.svg.png"
+
+    # --- MODELOS DE CONSOLAS ---
+    Console:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Nintendo Switch"
+        description:
+          type: string
+          example: "Híbrida: juega en la TV o en modo portátil."
+        release_date:
+          type: string
+          format: date
+          example: "2017-03-03"
+        url:
+          type: string
+          example: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Nintendo_Switch_Console.png/1200px-Nintendo_Switch_Console.png"
+        company_id:
+          type: integer
+          example: 1
+
+    ConsoleInput:
+      type: object
+      required: [name, description, release_date, url, company_id]
+      properties:
+        name:
+          type: string
+          example: "PlayStation 5"
+        description:
+          type: string
+          example: "Potencia bruta con carga ultrarrápida SSD."
+        release_date:
+          type: string
+          format: date
+          example: "2020-11-12"
+        url:
+          type: string
+          example: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/PlayStation_5_and_DualSense_with_transparent_background.png/1200px-PlayStation_5_and_DualSense_with_transparent_background.png"
+        company_id:
+          type: integer
+          example: 2
+
+    # --- MODELOS DE VIDEOJUEGOS ---
+    Videogame:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        title:
+          type: string
+          example: "The Legend of Zelda: BOTW"
+        description:
+          type: string
+          example: "Explora Hyrule con libertad total."
+        genre:
+          type: string
+          example: "Adventure"
+        release_date:
+          type: string
+          format: date
+          example: "2017-03-03"
+        pegi_rating:
+          type: string
+          example: "PEGI 12"
+        price:
+          type: number
+          format: float
+          example: 59.99
+        url:
+          type: string
+          example: "https://upload.wikimedia.org/wikipedia/en/c/c6/The_Legend_of_Zelda_Breath_of_the_Wild.jpg"
+        company_id:
+          type: integer
+          example: 1
+
+    VideogameInput:
+      type: object
+      required:
+        [
+          title,
+          description,
+          genre,
+          release_date,
+          pegi_rating,
+          price,
+          url,
+          company_id,
+        ]
+      properties:
+        title:
+          type: string
+          example: "Nuevo Juego"
+        description:
+          type: string
+          example: "Descripción increíble"
+        genre:
+          type: string
+          example: "Action"
+        release_date:
+          type: string
+          format: date
+          example: "2024-05-20"
+        pegi_rating:
+          type: string
+          example: "PEGI 18"
+        price:
+          type: number
+          format: float
+          example: 69.99
+        url:
+          type: string
+          example: "https://ejemplo.com/imagen.jpg"
+        company_id:
+          type: integer
+          example: 1
+
+  # --- RESPUESTAS DE ERROR GLOBALES  ---
+  responses:
+    BadRequest:
+      description: Faltan campos obligatorios o los datos son inválidos
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 400
+              title:
+                type: string
+                example: bad-request
+              message:
+                type: string
+                example: "Error de validación: campos incorrectos"
+    NotFound:
+      description: El recurso solicitado no existe
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 404
+              title:
+                type: string
+                example: not-found
+              message:
+                type: string
+                example: "Endpoint no encontrado"
+    InternalError:
+      description: Error interno del servidor o de la base de datos
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                example: 500
+              title:
+                type: string
+                example: internal-error
+              message:
+                type: string
+                example: "Error interno del servidor"
