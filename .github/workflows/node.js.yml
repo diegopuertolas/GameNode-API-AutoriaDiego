@@ -24,8 +24,23 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
-    - name: Create local config file
-      run: cp config.sample.yaml config.local.yaml
+    - name: Setup Environment Variables & Config
+      run: |
+        # 1. Creamos el .env para que Docker sepa qué base de datos crear
+        echo "MARIADB_USER=testuser" >> .env
+        echo "MARIADB_PASSWORD=testpass" >> .env
+        echo "MARIADB_DATABASE=gamenode" >> .env
+        echo "MARIADB_ROOT_PASSWORD=rootpass" >> .env
+        
+        # 2. Creamos el config.local.yaml para que Node.js sepa dónde conectarse
+        echo "db:" > config.local.yaml
+        echo "  host: 127.0.0.1" >> config.local.yaml
+        echo "  port: 3306" >> config.local.yaml
+        echo "  user: testuser" >> config.local.yaml
+        echo "  password: testpass" >> config.local.yaml
+        echo "  database: gamenode" >> config.local.yaml
+        echo "service:" >> config.local.yaml
+        echo "  port: 3000" >> config.local.yaml
       
     - name: Start Database
       run: docker compose -f docker-compose.dev.yaml up -d
