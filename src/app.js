@@ -39,7 +39,12 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = config.service.port || 8080;
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Backend iniciado en el puerto: ${PORT}`);
-});
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    // eslint-disable-next-line no-console
+    console.log(`Backend iniciado en el puerto: ${PORT}`);
+  });
+}
+
+module.exports = app;
