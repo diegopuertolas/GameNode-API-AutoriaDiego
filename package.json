@@ -6,7 +6,8 @@
     "start": "node src/app.js --config config.local.yaml",
     "dev": "nodemon -e js,yaml src/app.js -- --config config.local.yaml",
     "test:unit": "jest src/test/unit",
-    "test": "npm run test:unit",
+    "test:integration": "NODE_ENV=test jest src/test/integration --runInBand",
+    "test": "npm run test:unit && npm run test:integration",
     "lint": "eslint src/",
     "format": "prettier --write \"src/**/*.js\""
   },
