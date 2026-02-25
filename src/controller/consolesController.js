@@ -8,6 +8,8 @@ const {
   removeConsole,
 } = require("../service/consolesService.js");
 
+const { isRetro } = require("../utils/isRetro");
+
 /**
  * Obtiene el listado completo de los videojeugos.
  * Devuelve un JSON estandarizado con el array de juegos en el campo 'data'.
@@ -19,12 +21,23 @@ const {
 const getAllConsoles = async (req, res, next) => {
   try {
     const consoles = await findAllConsoles();
+
+    const consoleRetro = consoles.map((console) => {
+      const releaseDate = new Date(console.release_date);
+      const retro = isRetro(releaseDate);
+      return {
+        ...console,
+        retro,
+      };
+    });
+
     res.status(200).json({
       code: 200,
       title: "success",
       message: "Consoles retrieved successfully",
-      data: consoles,
+      data: consoleRetro,
     });
+    
   } catch (error) {
     next(error);
   }
