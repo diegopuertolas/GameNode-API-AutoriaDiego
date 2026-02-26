@@ -69,7 +69,9 @@ describe('Integration tests for companies API', () => {
 
   describe('POST /companies', () => {
     beforeEach(async () => {
-      try { await db('companies').del(); } catch (e) {}
+      try {
+        await db('companies').del();
+      } catch (e) {}
     });
 
     test('creates company (201) with valid payload', async () => {
@@ -109,5 +111,58 @@ describe('Integration tests for companies API', () => {
     });
   });
 
-});
+  describe('PUT /companies/:id', () => {
+    beforeEach(async () => {
+      try {
+        await db('companies').del();
+      } catch (e) {}
+      await db('companies').insert({
+        id: 50,
+        name: 'OriginalCo',
+        description: 'Original',
+        country: 'USA',
+        year_founded: 2000,
+        website: 'https://orig.co',
+        logo: 'logo.png'
+      });
+    });
 
+    test('updates existing company (200)', async () => {
+      const payload = {
+        name: 'UpdatedCo',
+        description: 'Updated desc',
+        country: 'USA',
+        year_founded: 2001,
+        website: 'https://updated.co'
+      };
+      const res = await request(app).put('/companies/50').send(payload);
+      expect(res.statusCode).toBe(200);
+      expect(res.body.title).toBe('success');
+      expect(res.body.data.name).toBe('UpdatedCo');
+    });
+
+    test('returns 404 when updating non-existent company', async () => {
+      const payload = {
+        name: 'DoesNotExist',
+        country: 'Nowhere',
+        year_founded: 2000,
+        website: 'https://nope'
+      };
+      const res = await request(app).put('/companies/999999').send(payload);
+      expect(res.statusCode).toBe(404);
+      expect(res.body.title).toBe('not-found');
+    });
+
+    test('returns 400 for invalid id', async () => {
+      const payload = {
+        name: 'BadID',
+        country: 'Nowhere',
+        year_founded: 2000,
+        website: 'https://bad'
+      };
+      const res = await request(app).put('/companies/abc').send(payload);
+      expect(res.statusCode).toBe(400);
+      expect(res.body).toHaveProperty('errors');
+    });
+  });
+});
