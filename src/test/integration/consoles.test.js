@@ -72,4 +72,36 @@ describe('Integration test for consoles API', () => {
 
         });
     });
+
+    // GET /consoles/:id
+
+    describe('GET /consoles/:id', () => {
+
+        test('should return a specific console by ID', async () => {
+            const response = await request(app).get('/consoles/1');
+
+            expect(response.status).toEqual(200);
+            expect(response.body.title).toBe('success')
+            expect(response.body.message).toBe('Console retrieved successfully');
+            expect(response.body).toHaveProperty('data');
+            expect(response.body.data.name).toBe('PlayStation 5');
+            expect(response.body.data).toHaveProperty('retro');
+        });
+
+        test('should return 404 if console not found', async () => {
+            const response = await request(app).get('/consoles/999');
+
+            expect(response.status).toEqual(404);
+            expect(response.body.title).toBe('not found')
+            expect(response.body.message).toBe('Console with id 999 not found');
+        });
+
+        test('should return 400 for invalid ID', async () => {
+            const response = await request(app).get('/consoles/invalid');
+
+            expect(response.status).toEqual(400);
+            expect(response.body.title).toBe('validation error');
+            expect(Array.isArray(response.body.errors)).toBe(true);
+        });
+    });
 });
