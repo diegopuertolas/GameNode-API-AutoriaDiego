@@ -33,8 +33,8 @@ Este proyecto ha sido desarrollado aplicando buenas prácticas de Ingeniería de
 
 La API está desplegada de forma continua y automatizada en **Railway**. 
 
-* **URL Base de la API:** `https://gamenode-api-production.up.railway.app/`
-* **Documentación Swagger UI:** `https://gamenode-api-production.up.railway.app//api-docs`
+* **URL Base de la API:** `https://gamenode-api.up.railway.app/`
+* **Documentación Swagger UI:** `https://gamenode-api.up.railway.app/api-docs/`
 
 ## <a name="stack"></a>🛠️ Stack Tecnológico
 
