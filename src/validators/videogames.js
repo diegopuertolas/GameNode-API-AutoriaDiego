@@ -104,6 +104,12 @@ const validateAddVideogame = [
     .isInt({ gt: 0 })
     .withMessage("Each console ID must be a positive integer"),
 
+  body("metacritic_score")
+    .notEmpty()
+    .withMessage("Metacritic score is required")
+    .isInt({ min: 0, max: 100 })
+    .withMessage("Metacritic score must be an integer between 0 and 100"),
+
   validateResult,
 ];
 
