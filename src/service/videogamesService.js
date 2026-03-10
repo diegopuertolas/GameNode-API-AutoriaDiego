@@ -1,6 +1,7 @@
 // Archivo en el que accedemos a la base de datos a por la información requerida y realizamos las operaciones de lógica necesarias.
 
 const db = require("../configuration/database.js").db;
+const { getMetacriticTier } = require("../utils/metacriticUtils");
 
 /**
  * Método para obtener todos los videojuegos de la base de datos, incluyendo el nombre y logo de la compañía a la que pertenecen.
@@ -26,6 +27,7 @@ const findAllVideogames = async () => {
     return {
       ...game,
       consoles: gameConsoles,
+      metacriticTier: getMetacriticTier(game.metacritic_score),
     };
   });
 
@@ -60,6 +62,7 @@ const findVideogameById = async (id) => {
     );
 
   videogame.consoles = consoles;
+  videogame.metacriticTier = getMetacriticTier(videogame.metacritic_score);
 
   return videogame;
 };
