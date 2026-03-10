@@ -34,23 +34,24 @@ CREATE TABLE IF NOT EXISTS videogames (
   pegi_rating VARCHAR(10) NOT NULL,
   price DECIMAL(10, 2) NOT NULL,
   url VARCHAR(255) NOT NULL,
+  metacritic_score INT NOT NULL,
 
   company_id INT,
   CONSTRAINT fk_company_videogame
     FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE CASCADE
 );
 
-INSERT INTO videogames (title, description, genre, release_date, pegi_rating, price, url, company_id) VALUES
-('The Legend of Zelda: BOTW', 'Explora Hyrule con libertad total.', 'Adventure', '2017-03-03', 'PEGI 12', 59.99, 'https://upload.wikimedia.org/wikipedia/en/c/c6/The_Legend_of_Zelda_Breath_of_the_Wild.jpg', 1),
-('God of War Ragnarök', 'Kratos y Atreus enfrentan el fin del mundo.', 'Action', '2022-11-09', 'PEGI 18', 69.99, 'https://upload.wikimedia.org/wikipedia/en/e/ee/God_of_War_Ragnar%C3%B6k_cover.jpg', 2),
-('Halo Infinite', 'El Jefe Maestro regresa para salvar la humanidad.', 'Shooter', '2021-12-08', 'PEGI 16', 59.99, 'https://upload.wikimedia.org/wikipedia/en/1/14/Halo_Infinite.png', 3),
-('Resident Evil Village', 'Sobrevive en una aldea llena de monstruos.', 'Horror', '2021-05-07', 'PEGI 18', 49.99, 'https://upload.wikimedia.org/wikipedia/en/2/2c/Resident_Evil_Village.png', 4),
-('Final Fantasy VII Remake', 'Reimagina la historia de Cloud Strife.', 'RPG', '2020-04-10', 'PEGI 16', 59.99, 'https://upload.wikimedia.org/wikipedia/en/c/ce/FFVII_Remake_cover.jpg', 5),
-('Assassins Creed Valhalla', 'Conquista Inglaterra como un vikingo.', 'Action RPG', '2020-11-10', 'PEGI 18', 59.99, 'https://upload.wikimedia.org/wikipedia/en/f/ff/Assassin%27s_Creed_Valhalla_cover.jpg', 6),
-('FIFA 23', 'El simulador de fútbol más realista.', 'Sports', '2022-09-30', 'PEGI 3', 69.99, 'https://upload.wikimedia.org/wikipedia/en/a/a6/FIFA_23_Cover.jpg', 7),
-('Sonic Frontiers', 'Sonic corre libre en un mundo abierto.', 'Platformer', '2022-11-08', 'PEGI 7', 59.99, 'https://upload.wikimedia.org/wikipedia/en/5/52/Sonic_Frontiers_cover_art.jpg', 8),
-('Grand Theft Auto V', 'Tres criminales arriesgan todo en Los Santos.', 'Action', '2013-09-17', 'PEGI 18', 29.99, 'https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png', 9),
-('Elden Ring', 'Un mundo de fantasía oscura creado por Miyazaki.', 'RPG', '2022-02-25', 'PEGI 16', 59.99, 'https://upload.wikimedia.org/wikipedia/en/b/b9/Elden_Ring_Box_art.jpg', 10);
+INSERT INTO videogames (title, description, genre, release_date, pegi_rating, price, url, company_id, metacritic_score) VALUES
+('The Legend of Zelda: BOTW', 'Explora Hyrule con libertad total.', 'Adventure', '2017-03-03', 'PEGI 12', 59.99, 'https://upload.wikimedia.org/wikipedia/en/c/c6/The_Legend_of_Zelda_Breath_of_the_Wild.jpg', 1, 97),
+('God of War Ragnarök', 'Kratos y Atreus enfrentan el fin del mundo.', 'Action', '2022-11-09', 'PEGI 18', 69.99, 'https://upload.wikimedia.org/wikipedia/en/e/ee/God_of_War_Ragnar%C3%B6k_cover.jpg', 2, 95),
+('Halo Infinite', 'El Jefe Maestro regresa para salvar la humanidad.', 'Shooter', '2021-12-08', 'PEGI 16', 59.99, 'https://upload.wikimedia.org/wikipedia/en/1/14/Halo_Infinite.png', 3, 85),
+('Resident Evil Village', 'Sobrevive en una aldea llena de monstruos.', 'Horror', '2021-05-07', 'PEGI 18', 49.99, 'https://upload.wikimedia.org/wikipedia/en/2/2c/Resident_Evil_Village.png', 4, 88),
+('Final Fantasy VII Remake', 'Reimagina la historia de Cloud Strife.', 'RPG', '2020-04-10', 'PEGI 16', 59.99, 'https://upload.wikimedia.org/wikipedia/en/c/ce/FFVII_Remake_cover.jpg', 5, 90),
+('Assassins Creed Valhalla', 'Conquista Inglaterra como un vikingo.', 'Action RPG', '2020-11-10', 'PEGI 18', 59.99, 'https://upload.wikimedia.org/wikipedia/en/f/ff/Assassin%27s_Creed_Valhalla_cover.jpg', 6, 92),
+('FIFA 23', 'El simulador de fútbol más realista.', 'Sports', '2022-09-30', 'PEGI 3', 69.99, 'https://upload.wikimedia.org/wikipedia/en/a/a6/FIFA_23_Cover.jpg', 7, 87),
+('Sonic Frontiers', 'Sonic corre libre en un mundo abierto.', 'Platformer', '2022-11-08', 'PEGI 7', 59.99, 'https://upload.wikimedia.org/wikipedia/en/5/52/Sonic_Frontiers_cover_art.jpg', 8, 84),
+('Grand Theft Auto V', 'Tres criminales arriesgan todo en Los Santos.', 'Action', '2013-09-17', 'PEGI 18', 29.99, 'https://upload.wikimedia.org/wikipedia/en/a/a5/Grand_Theft_Auto_V.png', 9, 91),
+('Elden Ring', 'Un mundo de fantasía oscura creado por Miyazaki.', 'RPG', '2022-02-25', 'PEGI 16', 59.99, 'https://upload.wikimedia.org/wikipedia/en/b/b9/Elden_Ring_Box_art.jpg', 10, 94);
 
 -- Tabla de consolas.
 CREATE TABLE IF NOT EXISTS consoles (

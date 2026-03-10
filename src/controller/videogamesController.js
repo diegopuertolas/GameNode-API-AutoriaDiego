@@ -5,9 +5,10 @@ const {
   findVideogameById,
   addVideogame,
   updateVideogame,
-  removeVideogame,
-} = require("../service/videogamesService");
-const { calculatePriceWithTax } = require("../utils/priceUtils");
+  removeVideogame
+} = require('../service/videogamesService');
+const { calculatePriceWithTax } = require('../utils/priceUtils');
+const { getMetacriticTier } = require('../utils/metacriticUtils');
 
 /**
  * Obtiene el listado completo de videojuegos.
@@ -21,20 +22,22 @@ const getAllVideogames = async (req, res, next) => {
   try {
     const videogames = await findAllVideogames();
 
-    const videogamesWithTax = videogames.map((game) => {
+    const videogamesWithTaxAndMetacritic = videogames.map((game) => {
       const taxPrice = calculatePriceWithTax(Number(game.price));
+      const metacriticTier = getMetacriticTier(game.metacritic_score);
 
       return {
         ...game,
         ...(taxPrice !== null && { priceWithTax: taxPrice }),
+        ...(metacriticTier && { metacriticTier })
       };
     });
 
     res.status(200).json({
       code: 200,
-      title: "success",
-      message: "Videogames retrieved successfully",
-      data: videogamesWithTax,
+      title: 'success',
+      message: 'Videogames retrieved successfully',
+      data: videogamesWithTaxAndMetacritic
     });
   } catch (error) {
     next(error);
@@ -57,23 +60,25 @@ const getVideogameById = async (req, res, next) => {
     if (!videogame) {
       return res.status(404).json({
         code: 404,
-        title: "not-found",
-        message: `Videogame with id ${id} not found`,
+        title: 'not-found',
+        message: `Videogame with id ${id} not found`
       });
     }
 
     const taxPrice = calculatePriceWithTax(Number(videogame.price));
+    const metacriticTier = getMetacriticTier(videogame.metacritic_score);
 
-    const videogameWithTax = {
+    const videogameWithTaxAndMetacritic = {
       ...videogame,
       ...(taxPrice !== null && { priceWithTax: taxPrice }),
+      ...(metacriticTier && { metacriticTier })
     };
 
     res.status(200).json({
       code: 200,
-      title: "success",
-      message: "Videogame retrieved successfully",
-      data: videogameWithTax,
+      title: 'success',
+      message: 'Videogame retrieved successfully',
+      data: videogameWithTaxAndMetacritic
     });
   } catch (error) {
     next(error);
@@ -97,9 +102,9 @@ const postVideogame = async (req, res, next) => {
     };
     res.status(201).json({
       code: 201,
-      title: "created",
-      message: "Videogame created successfully",
-      data: newVideogame,
+      title: 'created',
+      message: 'Videogame created successfully',
+      data: newVideogame
     });
   } catch (error) {
     next(error);
@@ -126,16 +131,16 @@ const putVideogame = async (req, res, next) => {
     if (!updatedVideogame) {
       return res.status(404).json({
         code: 404,
-        title: "not-found",
-        message: `Videogame with id ${id} not found after update`,
+        title: 'not-found',
+        message: `Videogame with id ${id} not found after update`
       });
     }
 
     res.status(200).json({
       code: 200,
-      title: "success",
-      message: "Videogame updated successfully",
-      data: updatedVideogame,
+      title: 'success',
+      message: 'Videogame updated successfully',
+      data: updatedVideogame
     });
   } catch (error) {
     next(error);
@@ -158,15 +163,15 @@ const deleteVideogame = async (req, res, next) => {
     if (deletedCount === 0) {
       return res.status(404).json({
         code: 404,
-        title: "not-found",
-        message: `Videogame with id ${id} not found`,
+        title: 'not-found',
+        message: `Videogame with id ${id} not found`
       });
     }
 
     res.status(200).json({
       code: 200,
-      title: "success",
-      message: `Videogame with id ${id} deleted successfully`,
+      title: 'success',
+      message: `Videogame with id ${id} deleted successfully`
     });
   } catch (error) {
     next(error);
@@ -178,5 +183,5 @@ module.exports = {
   getVideogameById,
   postVideogame,
   putVideogame,
-  deleteVideogame,
+  deleteVideogame
 };
